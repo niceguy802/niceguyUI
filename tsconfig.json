@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "target": "ES2018",
+    "declaration": true,         // ⭐生成类型声明文件
+    "declarationDir": "dist/types",
+    "emitDeclarationOnly": true, // 仅生成声明，不编译 .js
+    "strict": true,
+    "jsx": "preserve",
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "packages/*": ["packages/*"]
+    }
+  },
+  "include": ["packages/**/*", "src/**/*", "typings.d.ts"]
+}

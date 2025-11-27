@@ -1,0 +1,11 @@
+/* 全局 DemoBlock 样式 */
+.demo-block pre {
+  background: #f5f5f5;
+  padding: 12px;
+  border-radius: 6px;
+  overflow-x: auto;
+}
+
+.demo-block code {
+  font-family: "Fira Code", monospace;
+}

@@ -1,0 +1,49 @@
+{
+  "name": "niceguyui",
+  "version": "1.0.0",
+  "description": "自用UI组件",
+  "type": "module",
+  "scripts": {
+    "new": "ts-node-esm scripts/create.ts",
+    "build:all": "node scripts/build.ts",
+    "docs:build": "vitepress build docs",
+    "docs:serve": "vitepress serve docs",
+    "docs:dev": "vitepress dev docs"
+  },
+  "main": "dist/niceguy-ui.umd.js",
+  "module": "dist/niceguy-ui.es.js",
+  "types": "dist/types/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "peerDependencies": {
+    "element-plus": "^2.0.0",
+    "vue": "^3.0.0"
+  },
+  "keywords": [
+    "vue",
+    "ui"
+  ],
+  "author": "niceguy",
+  "license": "ISC",
+  "dependencies": {
+    "element-plus": "^2.0.0",
+    "vue": "^3.0.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^29.0.0",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "@vitejs/plugin-vue": "^6.0.2",
+    "markdown-it-container": "^4.0.0",
+    "rollup": "^4.53.3",
+    "rollup-plugin-typescript2": "^0.36.0",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3",
+    "vite": "^7.2.4",
+    "vitepress": "^1.6.4"
+  },
+  "engines": {
+    "node": ">= 18"
+  }
+}
