@@ -15,7 +15,9 @@ defineProps({
 </script>
 
 <template>
-  <ElButton :type="type" class="niceguy-button">{{ label }}</ElButton>
+  <ElButton :type="type" class="niceguy-button">
+    <slot>{{ label }}</slot>
+  </ElButton>
 </template>
 
 <style scoped>
