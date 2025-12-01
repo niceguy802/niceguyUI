@@ -3,6 +3,9 @@
 
 # Package Manager
 node_modules
+*.tgz
+*.zip
+*.tar.gz
 
 # Bundle
 dist

@@ -1,36 +1,43 @@
-// 自动按组件构建 - node scripts/build.ts
 import fs from "fs";
 import path from "path";
-import { build } from "vite";
-import vue from "@vitejs/plugin-vue";
+import { execSync } from "child_process";
 
-const root = path.resolve(__dirname, "../packages");
-const components = fs.readdirSync(root).filter(f => fs.statSync(path.resolve(root, f)).isDirectory());
+const pkgRoot = path.resolve("packages/components");
+const distRoot = path.resolve("dist/components");
 
+if (!fs.existsSync(distRoot)) fs.mkdirSync(distRoot, { recursive: true });
+
+// 获取组件列表
+const components = fs.readdirSync(pkgRoot)
+  .filter(name => fs.statSync(path.join(pkgRoot, name)).isDirectory());
+
+// 构建单个组件（使用 Vite 以正确处理 .vue 文件）
 async function buildComponent(name: string) {
-  await build({
-    plugins: [vue()],
-    build: {
-      outDir: `dist/${name}`,
-      lib: {
-        entry: path.resolve(root, name, "index.ts"),
-        name,
-        fileName: format => `${name}.${format}.js`,
-        formats: ["es","umd"]
-      },
-      rollupOptions: {
-        external: ["vue","element-plus"],
-        output: {
-          globals: { vue: "Vue","element-plus": "ElementPlus" }
-        }
-      }
-    }
-  });
-  console.log(`✔ ${name} build complete`);
+  const entry = path.join(pkgRoot, name, "index.ts");
+  const outDir = path.join(distRoot, name);
+
+  if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
+
+  console.log(`\n📦 Building component: ${name}`);
+
+  try {
+    execSync("npm run build:all", {
+      stdio: "inherit",
+      env: { ...process.env, COMPONENT_NAME: name, COMPONENT_ENTRY: entry }
+    });
+
+    console.log(`✔ Success → ${name}`);
+  } catch (err) {
+    console.error(`❌ Failed: ${name}`);
+    console.error(err);
+  }
 }
 
-(async ()=>{
-  console.log("\n📦 Auto building components...\n");
-  for(const c of components) await buildComponent(c);
-  console.log("\n🎉 All components built successfully!");
+// 批量构建
+(async () => {
+  console.log("\n🚀 Auto Building Components...\n");
+  for (const name of components) {
+    await buildComponent(name);
+  }
+  console.log("\n🎉 All components built successfully!\n");
 })();

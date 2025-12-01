@@ -1,11 +1,21 @@
 {
-  "name": "niceguyui",
+  "name": "@sisin/ui",
   "version": "1.0.0",
   "description": "自用UI组件",
   "type": "module",
   "scripts": {
+    "clean": "rm -rf dist",
+    "build": "npm run build:all && npm run build:components && npm run types",
+    "release": "npm run build && npm publish",
+    "release:patch": "npm version patch && npm run release",
+    "release:minor": "npm version minor && npm run release",
+    "release:major": "npm version major && npm run release",
     "new": "ts-node-esm scripts/create.ts",
-    "build:all": "node scripts/build.ts",
+    "build:all": "vite build",
+    "build:components": "tsx scripts/build.ts",
+    "build:components:one": "rollup -c scripts/rollup.components.ts",
+    "types": "tsc -p tsconfig.json",
+    "prepublishOnly": "npm run build:all && npm run build:components && npm run types",
     "docs:build": "vitepress build docs",
     "docs:serve": "vitepress serve docs",
     "docs:dev": "vitepress dev docs"
@@ -13,27 +23,39 @@
   "main": "dist/niceguy-ui.umd.js",
   "module": "dist/niceguy-ui.es.js",
   "types": "dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/niceguy-ui.es.js",
+      "require": "./dist/niceguy-ui.umd.js"
+    },
+    "./style": "./dist/ui.css",
+    "./button": {
+      "types": "./dist/types/packages/components/button/index.d.ts",
+      "import": "./dist/components/button/button.es.js",
+      "require": "./dist/components/button/button.umd.js"
+    }
+  },
+  "sideEffects": false,
   "files": [
     "dist"
   ],
   "peerDependencies": {
     "element-plus": "^2.0.0",
-    "vue": "^3.0.0"
+    "vue": "^3.5.0"
   },
   "keywords": [
     "vue",
     "ui"
   ],
-  "author": "niceguy",
+  "author": "sisin",
   "license": "ISC",
-  "dependencies": {
-    "element-plus": "^2.0.0",
-    "vue": "^3.0.0"
-  },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^29.0.0",
     "@rollup/plugin-node-resolve": "^16.0.3",
+    "@rollup/plugin-typescript": "^12.3.0",
     "@vitejs/plugin-vue": "^6.0.2",
+    "@vue/compiler-sfc": "^3.5.0",
     "markdown-it-container": "^4.0.0",
     "rollup": "^4.53.3",
     "rollup-plugin-typescript2": "^0.36.0",
@@ -44,6 +66,9 @@
     "vitepress": "^1.6.4"
   },
   "engines": {
-    "node": ">= 18"
+    "node": ">= 20"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

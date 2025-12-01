@@ -1,9 +1,9 @@
 import Button from './components/button'
 
-export { Button }
-
-export default {
+const NiceguyUI = {
   install(app: any) {
     app.use(Button)
   }
 }
+
+export { Button, NiceguyUI }

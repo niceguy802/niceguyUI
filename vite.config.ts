@@ -2,17 +2,29 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import path from 'path'
 
+const componentName = process.env.COMPONENT_NAME
+const componentEntry = process.env.COMPONENT_ENTRY
+const isComponentBuild = !!componentName && !!componentEntry
+
 export default defineConfig({
   plugins: [vue()],
   build: {
-    lib: {
-      entry: path.resolve(__dirname, 'packages/index.ts'),
-      name: 'niceguyUI',
-      fileName: (format) => `niceguy-ui.${format}.js`
-    },
+    lib: isComponentBuild
+      ? {
+          entry: componentEntry!,
+          name: componentName!,
+          fileName: (format) => `${componentName}.${format}.js`
+        }
+      : {
+          entry: path.resolve(__dirname, 'packages/index.ts'),
+          name: 'niceguyUI',
+          fileName: (format) => `niceguy-ui.${format}.js`
+        },
+    outDir: isComponentBuild ? `dist/components/${componentName}` : undefined,
     rollupOptions: {
-      external: ['vue', 'element-plus'], // 🔥不打包Vue和ElementPlus，保持最小体积
+      external: ['vue', 'element-plus'],
       output: {
+        exports: 'named',
         globals: {
           vue: 'Vue',
           'element-plus': 'ElementPlus'
